@@ -567,7 +567,7 @@ contract MiniDOGE is Context, IERC20, Ownable {
 
         require(_tradingEnabledTimestamp > block.timestamp, "trading time should gt now time!");
 
-        marketingAddress = _marketingAddress;
+        marketingAddress = payable(_marketingAddress);
 
         _rOwned[_msgSender()] = _rTotal;
 
@@ -1197,6 +1197,11 @@ contract MiniDOGE is Context, IERC20, Ownable {
 
     function transferToAddressETH(address payable recipient, uint256 amount) private {
         recipient.transfer(amount);
+    }
+
+    function changeTradingEnabledTimestamp(uint tradeTime) public onlyOwner {
+        require(tradeTime < tradingEnabledTimestamp, "can not change time after now trading time!");
+        tradingEnabledTimestamp = tradeTime;
     }
 
     function changeRouterVersion(address _router) public onlyOwner returns (address _pair) {
